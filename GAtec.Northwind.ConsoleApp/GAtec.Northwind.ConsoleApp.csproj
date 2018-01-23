@@ -61,6 +61,10 @@
       <Project>{7f41bf31-dd47-453a-bf58-b46561713b3c}</Project>
       <Name>GAtec.Northwind.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GAtec.Northwind.Util\GAtec.Northwind.Util.csproj">
+      <Project>{02af8204-ded8-4f8b-8da4-038d0550f330}</Project>
+      <Name>GAtec.Northwind.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
