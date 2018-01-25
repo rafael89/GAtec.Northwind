@@ -35,6 +35,7 @@ namespace GAtec.Northwind.ConsoleApp
                 Console.WriteLine(" 2 - Update Category");
                 Console.WriteLine(" 3 - Delete Category");
                 Console.WriteLine(" 4 - Select Category");
+                Console.WriteLine(" 5 - List all categories");
             }
 
             int option;
@@ -67,6 +68,14 @@ namespace GAtec.Northwind.ConsoleApp
 
                         // call the Add method from category service
                         categoryService.Add(category);
+
+                        if (categoryService.Validation.Any())
+                        {
+                            foreach (var item in categoryService.Validation)
+                            {
+                                Console.WriteLine($"{item.Key}: {item.Value}");
+                            }
+                        }
 
                         break;
 
@@ -112,7 +121,29 @@ namespace GAtec.Northwind.ConsoleApp
 
                         Console.Clear();
 
-                        //select
+                        Console.Write("Type a valid id for select: ");
+
+                        var idSelect = int.Parse(Console.ReadLine());
+
+                        var select = categoryService.GetCategory(idSelect);
+
+                        Console.WriteLine($"{select.Id} - {select.Name} - {select.Description}");
+
+                        Console.ReadLine();
+
+                        break;
+
+                    case 5:
+
+                        Console.Clear();
+
+                        var categories = categoryService.GetCategories();
+                        foreach (var c in categories)
+                        {
+                            Console.WriteLine($"{c.Id} - {c.Name} - {c.Description}");
+                        }
+
+                        Console.ReadLine();
 
                         break;
                 }

@@ -3,7 +3,7 @@ using GAtec.Northwind.Domain.Model;
 
 namespace GAtec.Northwind.Domain.Business
 {
-    public interface ICategoryService
+    public interface ICategoryService : IService
     {
         void Add(Category category);
 

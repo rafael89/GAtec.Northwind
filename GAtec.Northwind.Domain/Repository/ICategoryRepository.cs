@@ -9,5 +9,6 @@ namespace GAtec.Northwind.Domain.Repository
 {
     public interface ICategoryRepository : IBaseRepository<Category>
     {
+        bool ExistsName(string name, int id = 0);
     }
 }

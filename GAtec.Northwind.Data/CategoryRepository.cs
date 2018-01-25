@@ -59,28 +59,78 @@ namespace GAtec.Northwind.Data
 
         public Category Get(object id)
         {
-            /*
-            var ds = new DataSet();
+            Category category = null;
 
             using (var con = new SqlConnection(NorthwindSettings.ConnectionString))
             {
                 con.Open();
 
-                using (var adapter = new SqlDataAdapter("select CategoryName, Description from Categories where CategoryID = " + id, con))
+                using (var cmd = new SqlCommand("select CategoryID, CategoryName, Description from Categories where CategoryID = @id", con))
                 {
-                    adapter.Fill(ds);
+                    cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            category = new Category();
+
+                            category.Id = (int) reader["CategoryId"];
+                            category.Name = reader.GetString(1);
+                            category.Description = reader.GetString(reader.GetOrdinal("Description"));
+                        }
+                    }
                 }
             }
-
-            return ds;
-            */
-
-            throw new System.NotImplementedException();
+            return category;
         }
 
         public IEnumerable<Category> GetAll()
         {
-            throw new System.NotImplementedException();
+            var categories = new List<Category>();
+
+            using (var con = new SqlConnection(NorthwindSettings.ConnectionString))
+            {
+                con.Open();
+
+                using (var cmd = new SqlCommand("select CategoryID, CategoryName, Description from Categories order by CategoryID", con))
+                {
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var category = new Category
+                            {
+                                Id = (int)reader["CategoryId"],
+                                Name = reader.GetString(1),
+                                Description = reader.GetString(reader.GetOrdinal("Description"))
+                            };
+
+                            categories.Add(category);
+                        }
+                    }
+                }
+            }
+            return categories;
+        }
+
+        public bool ExistsName(string name, int id = 0)
+        {
+            bool result = false;
+            using (var con = new SqlConnection(NorthwindSettings.ConnectionString))
+            {
+                con.Open();
+
+                using (var cmd = new SqlCommand("select count(1) from Categories where Upper(CategoryName)=@name and CategoryId <> @id", con))
+                {
+                    cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
+                    cmd.Parameters.Add("name", SqlDbType.NVarChar).Value = name.ToUpper();
+
+                    result = (int)cmd.ExecuteScalar() > 0;
+                }
+            }
+            return result;
         }
     }
 }
