@@ -27,12 +27,17 @@ namespace GAtec.Northwind.Business
 
         public void Update(Category category)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(category.Name))
+            {
+                throw new Exception("The name is empty.");
+            }
+
+            CategoryRepository.Update(category);
         }
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            CategoryRepository.Delete(id);
         }
 
         public Category GetCategory(int id)
